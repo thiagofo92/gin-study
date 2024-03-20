@@ -66,8 +66,8 @@ func (gr *ginRouter) user() {
 	controller := controller.NewUserController(rep)
 
 	gr.r.POST("/user", controller.Create)
-	gr.r.GET("/user/:id")
-	gr.r.PUT("/user")
+	gr.r.GET("/user/:id", controller.FindById)
+	gr.r.PUT("/user/:id", controller.Update)
 }
 
 func (gr *ginRouter) book() {
@@ -76,6 +76,8 @@ func (gr *ginRouter) book() {
 
 	gr.r.POST("/book", controller.Add)
 	gr.r.PUT("/book/:id", controller.Update)
+	gr.r.GET("/book/:id", controller.FindById)
+	gr.r.DELETE("/book/:id", controller.Delete)
 }
 
 func (gr *ginRouter) Build() error {
@@ -83,6 +85,10 @@ func (gr *ginRouter) Build() error {
 	gr.book()
 
 	return nil
+}
+
+func Test(id string, g *gin.Context) {
+
 }
 
 // func parseData[T interface{}](args ...T) {
