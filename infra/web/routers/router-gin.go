@@ -44,7 +44,6 @@ func AdapterGin[T interface{}](fn FnController[T]) gin.HandlerFunc {
 		fn(body)
 
 		ctx.JSON(200, "Success")
-		return
 	}
 }
 

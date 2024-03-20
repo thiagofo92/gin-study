@@ -4,16 +4,16 @@ import (
 	"log/slog"
 	"net/http"
 	inputapp "thiagofo92/study-api-gin/app/input_app"
-	repmongo "thiagofo92/study-api-gin/infra/repository/rep_mongo"
+	"thiagofo92/study-api-gin/core"
 
 	"github.com/gin-gonic/gin"
 )
 
 type BookController struct {
-	rp *repmongo.BooksRepository
+	rp core.BookCore
 }
 
-func NewBookController(rp *repmongo.BooksRepository) *BookController {
+func NewBookController(rp core.BookCore) *BookController {
 	return &BookController{
 		rp: rp,
 	}
@@ -78,7 +78,7 @@ func (b *BookController) FindById(ctx *gin.Context) {
 func (b *BookController) Delete(ctx *gin.Context) {
 	id := ctx.Param("id")
 
-	output, err := b.rp.Delete(id)
+	_, err := b.rp.Delete(id)
 
 	if err != nil {
 		slog.Error("error to update: %v", err)
@@ -86,5 +86,5 @@ func (b *BookController) Delete(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusNoContent, output)
+	ctx.JSON(http.StatusNoContent, gin.H{"data": "success"})
 }

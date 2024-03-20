@@ -4,16 +4,16 @@ import (
 	"log/slog"
 	"net/http"
 	inputapp "thiagofo92/study-api-gin/app/input_app"
-	repmongo "thiagofo92/study-api-gin/infra/repository/rep_mongo"
+	"thiagofo92/study-api-gin/core"
 
 	"github.com/gin-gonic/gin"
 )
 
 type controller struct {
-	rep *repmongo.UserRepository
+	rep core.UserCore
 }
 
-func NewUserController(rp *repmongo.UserRepository) *controller {
+func NewUserController(rp core.UserCore) *controller {
 	return &controller{
 		rep: rp,
 	}

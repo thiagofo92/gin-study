@@ -93,7 +93,7 @@ func (b *BooksRepository) Delete(idStr string) (int64, error) {
 		return 0, fmt.Errorf("error to convert string to objectID %w", err)
 	}
 
-	filter := bson.D{{"_id", id}}
+	filter := bson.D{{Key: "_id", Value: id}}
 	res, err := b.coll.DeleteOne(context.TODO(), filter)
 
 	if err != nil {
