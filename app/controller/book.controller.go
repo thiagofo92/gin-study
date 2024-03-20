@@ -60,3 +60,31 @@ func (b *BookController) Update(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusNoContent, gin.H{"message": "success"})
 }
+
+func (b *BookController) FindById(ctx *gin.Context) {
+	id := ctx.Param("id")
+
+	output, err := b.rp.FindById(id)
+
+	if err != nil {
+		slog.Error("error to update: %v", err)
+		ctx.JSON(http.StatusInternalServerError, "internal server error")
+		return
+	}
+
+	ctx.JSON(http.StatusNoContent, output)
+}
+
+func (b *BookController) Delete(ctx *gin.Context) {
+	id := ctx.Param("id")
+
+	output, err := b.rp.Delete(id)
+
+	if err != nil {
+		slog.Error("error to update: %v", err)
+		ctx.JSON(http.StatusInternalServerError, "internal server error")
+		return
+	}
+
+	ctx.JSON(http.StatusNoContent, output)
+}
