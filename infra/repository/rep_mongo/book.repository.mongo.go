@@ -7,6 +7,7 @@ import (
 	"thiagofo92/study-api-gin/app/outputapp"
 	"thiagofo92/study-api-gin/infra/repository/rep_mongo/schema"
 
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -39,4 +40,65 @@ func (b *BooksRepository) Add(input inputapp.BookInput) (outputapp.BookOutput, e
 		Available:  input.Available,
 		Rented:     input.Rented,
 	}, nil
+}
+
+func (b *BooksRepository) Update(id string, input inputapp.BookInput) error {
+	data := schema.BookSchema(input)
+
+	u := bson.D{{
+		Key:   "$set",
+		Value: data,
+	}}
+
+	idbs, err := primitive.ObjectIDFromHex(id)
+
+	if err != nil {
+		return fmt.Errorf("error to convert string to objectId %w", err)
+	}
+
+	_, err = b.coll.UpdateByID(context.TODO(), idbs, u)
+
+	if err != nil {
+		return fmt.Errorf("error to add book %w", err)
+	}
+
+	return nil
+}
+
+func (b *BooksRepository) FindById(idStr string) (outputapp.BookOutput, error) {
+	id, err := primitive.ObjectIDFromHex(idStr)
+
+	if err != nil {
+		return outputapp.BookOutput{}, fmt.Errorf("error to convert string to objectID %w", err)
+	}
+
+	filter := bson.D{{"_id", id}}
+	res := b.coll.FindOne(context.TODO(), filter)
+
+	var output outputapp.BookOutput
+
+	err = res.Decode(&output)
+
+	if err != nil {
+		return outputapp.BookOutput{}, fmt.Errorf("error to find book in DB %w", err)
+	}
+
+	return output, nil
+}
+
+func (b *BooksRepository) Delete(idStr string) (int64, error) {
+	id, err := primitive.ObjectIDFromHex(idStr)
+
+	if err != nil {
+		return 0, fmt.Errorf("error to convert string to objectID %w", err)
+	}
+
+	filter := bson.D{{"_id", id}}
+	res, err := b.coll.DeleteOne(context.TODO(), filter)
+
+	if err != nil {
+		return 0, fmt.Errorf("error to find book in DB %w", err)
+	}
+
+	return res.DeletedCount, nil
 }

@@ -61,18 +61,26 @@ func NewGinRouter(r *gin.Engine) *ginRouter {
 	}
 }
 
-func (gr *ginRouter) routerUser() {
+func (gr *ginRouter) user() {
 	rep := repmongo.NewUserRepository(gr.db)
 	controller := controller.NewUserController(rep)
 
 	gr.r.POST("/user", controller.Create)
-	// gr.r.GET("/user/:id")
-	// gr.r.PUT("/user")
-	// gr.r.DELETE("/user/:id")
+	gr.r.GET("/user/:id")
+	gr.r.PUT("/user")
+}
+
+func (gr *ginRouter) book() {
+	rep := repmongo.NewBooksRepository(gr.db)
+	controller := controller.NewBookController(rep)
+
+	gr.r.POST("/book", controller.Add)
+	gr.r.PUT("/book/:id", controller.Update)
 }
 
 func (gr *ginRouter) Build() error {
-	gr.routerUser()
+	gr.user()
+	gr.book()
 
 	return nil
 }

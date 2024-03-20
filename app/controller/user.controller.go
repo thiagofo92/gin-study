@@ -25,6 +25,7 @@ func (c *controller) Create(ctx *gin.Context) {
 
 	if err != nil {
 		slog.Warn("error to unmarshal data %v", err)
+		ctx.JSON(http.StatusBadRequest, "invalid input")
 		return
 	}
 

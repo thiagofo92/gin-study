@@ -1,7 +1,7 @@
 package outputapp
 
 type BookOutput struct {
-	Id         string   `json:"_id,omitempty"`
+	Id         string   `json:"id,omitempty"`
 	Name       string   `json:"name"`
 	Author     string   `json:"author"`
 	Categories []string `json:"categories"`
