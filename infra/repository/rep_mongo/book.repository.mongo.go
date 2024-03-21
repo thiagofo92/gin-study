@@ -72,7 +72,7 @@ func (b *BooksRepository) FindById(idStr string) (outputapp.BookOutput, error) {
 		return outputapp.BookOutput{}, fmt.Errorf("error to convert string to objectID %w", err)
 	}
 
-	filter := bson.D{{"_id", id}}
+	filter := bson.D{{Key: "_id", Value: id}}
 	res := b.coll.FindOne(context.TODO(), filter)
 
 	var output outputapp.BookOutput
@@ -101,4 +101,24 @@ func (b *BooksRepository) Delete(idStr string) (int64, error) {
 	}
 
 	return res.DeletedCount, nil
+}
+
+func (b *BooksRepository) UpdateRent(idStr string, count int) error {
+	id, err := primitive.ObjectIDFromHex(idStr)
+
+	if err != nil {
+		return fmt.Errorf("error to convert string to objectID %w", err)
+	}
+
+	filter := bson.D{{Key: "_id", Value: id}}
+	v := bson.D{{Key: "$inc", Value: bson.D{{Key: "rented", Value: count}}}}
+
+	res, err := b.coll.UpdateOne(context.TODO(), filter, v)
+
+	if err != nil {
+		return fmt.Errorf("error to find book in DB %w", err)
+	}
+
+	fmt.Println("Count rented books", res.ModifiedCount)
+	return nil
 }

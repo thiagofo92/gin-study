@@ -10,4 +10,5 @@ type BookCore interface {
 	Update(id string, input inputapp.BookInput) error
 	FindById(id string) (outputapp.BookOutput, error)
 	Delete(id string) (int64, error)
+	UpdateRent(idStr string, count int) error
 }

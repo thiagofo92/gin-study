@@ -1,6 +1,8 @@
 package usecase
 
-import "thiagofo92/study-api-gin/core"
+import (
+	"thiagofo92/study-api-gin/core"
+)
 
 type usecase struct {
 	ruser core.UserCore
@@ -14,10 +16,37 @@ func NewBookUseCase(ruser core.UserCore, rbook core.BookCore) *usecase {
 	}
 }
 
-func (u *usecase) Rent() {
+func (u *usecase) Rent(userId string, bookId string) error {
+	rent := 1
+	err := u.rbook.UpdateRent(bookId, rent)
 
+	if err != nil {
+		return err
+	}
+
+	err = u.ruser.RentBook(userId, bookId)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
-func (u *usecase) GiveBack() {
+func (u *usecase) GiveBack(userId string, bookId string) error {
+	giveBack := -1
 
+	err := u.rbook.UpdateRent(bookId, giveBack)
+
+	if err != nil {
+		return err
+	}
+
+	err = u.ruser.GiveBookBack(userId, bookId)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

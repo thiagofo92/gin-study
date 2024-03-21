@@ -16,7 +16,7 @@ func TestUser(t *testing.T) {
 	mt.Run("Success to create a user", func(mt *mtest.T) {
 		rep := NewUserRepository(mt.DB)
 
-		mockInput := bson.D{{Key: "Name", Value: "Dev Silva"}, {"Email", "test@test.com"}, {"Password", "1234"}}
+		mockInput := bson.D{{Key: "Name", Value: "Dev Silva"}, {Key: "Email", Value: "test@test.com"}, {Key: "Password", Value: "1234"}}
 		mt.AddMockResponses(mtest.CreateCursorResponse(0, "library.client", mtest.FirstBatch, mockInput))
 
 		expected := outputapp.UserOutPut{

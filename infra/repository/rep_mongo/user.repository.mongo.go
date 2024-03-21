@@ -92,3 +92,53 @@ func (u *UserRepository) FindById(idStr string) (outputapp.UserOutPut, error) {
 
 	return output, nil
 }
+
+func (u *UserRepository) RentBook(idStr string, bookId string) error {
+
+	id, err := primitive.ObjectIDFromHex(idStr)
+
+	if err != nil {
+		return err
+	}
+
+	v := bson.D{{
+		Key: "$push",
+		Value: bson.D{{
+			Key:   "rentedBooks",
+			Value: bookId,
+		},
+			{
+				Key:   "booksHistory",
+				Value: bookId,
+			},
+		},
+	}}
+	u.coll.UpdateByID(context.TODO(), id, v)
+
+	return nil
+}
+
+func (u *UserRepository) GiveBookBack(idStr string, bookId string) error {
+	id, err := primitive.ObjectIDFromHex(idStr)
+
+	if err != nil {
+		return err
+	}
+
+	v := bson.D{{
+		Key: "$pull",
+		Value: bson.D{{
+			Key: "rentedBooks",
+			Value: bson.D{{
+				Key: "$elemMatch",
+				Value: bson.D{{
+					Key:   "$eq",
+					Value: id,
+				}},
+			}},
+		}},
+	}}
+	u.coll.UpdateByID(context.TODO(), id, v)
+
+	return nil
+}

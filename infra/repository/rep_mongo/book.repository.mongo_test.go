@@ -43,7 +43,7 @@ func TestBook(t *testing.T) {
 		rp := NewBooksRepository(mt.DB)
 		input := inputapp.BookInput{}
 
-		mt.AddMockResponses(mtest.CreateCursorResponse(1, "library.books", mtest.FirstBatch, bson.D{{"_id", ""}}))
+		mt.AddMockResponses(mtest.CreateCursorResponse(1, "library.books", mtest.FirstBatch, bson.D{{Key: "_id", Value: ""}}))
 		id := primitive.NewObjectID().Hex()
 		err := rp.Update(id, input)
 
@@ -54,7 +54,7 @@ func TestBook(t *testing.T) {
 		rp := NewBooksRepository(mt.DB)
 		input := inputapp.BookInput{}
 
-		mt.AddMockResponses(mtest.CreateCursorResponse(1, "library.books", mtest.FirstBatch, bson.D{{"_id", ""}}))
+		mt.AddMockResponses(mtest.CreateCursorResponse(1, "library.books", mtest.FirstBatch, bson.D{{Key: "_id", Value: ""}}))
 		err := rp.Update("", input)
 
 		assert.NotNil(t, err)
