@@ -33,7 +33,7 @@ func (u *usecase) Rent(userId string, bookId string) error {
 	return nil
 }
 
-func (u *usecase) GiveBack(userId string, bookId string) error {
+func (u *usecase) ReturnBook(userId string, bookId string) error {
 	giveBack := -1
 
 	err := u.rbook.UpdateRent(bookId, giveBack)
@@ -42,7 +42,7 @@ func (u *usecase) GiveBack(userId string, bookId string) error {
 		return err
 	}
 
-	err = u.ruser.GiveBookBack(userId, bookId)
+	err = u.ruser.ReturnBook(userId, bookId)
 
 	if err != nil {
 		return err

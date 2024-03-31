@@ -151,4 +151,84 @@ func TestUser(t *testing.T) {
 
 		assert.NotNil(t, err)
 	})
+
+	mt.Run("success to rent a book", func(mt *mtest.T) {
+		rep := NewUserRepository(mt.DB)
+
+		mt.AddMockResponses(mtest.CreateCursorResponse(0, "library.user", mtest.FirstBatch, bson.D{}))
+
+		idUser := primitive.NewObjectID().Hex()
+
+		err := rep.RentBook(idUser, "")
+
+		assert.Nil(t, err, nil)
+	})
+
+	mt.Run("error to rent a book", func(mt *mtest.T) {
+		rep := NewUserRepository(mt.DB)
+
+		var wer mtest.WriteConcernError
+		wer.Message = "test error"
+
+		mt.AddMockResponses(mtest.CreateWriteConcernErrorResponse(wer))
+
+		idUser := primitive.NewObjectID().Hex()
+
+		err := rep.RentBook(idUser, "")
+
+		assert.NotNil(t, err)
+	})
+
+	mt.Run("error to rent a book - convert string to objectId", func(mt *mtest.T) {
+		rep := NewUserRepository(mt.DB)
+
+		var wer mtest.WriteConcernError
+		wer.Message = "test error"
+
+		mt.AddMockResponses(mtest.CreateWriteConcernErrorResponse(wer))
+
+		err := rep.RentBook("", "")
+
+		assert.Contains(t, err.Error(), "convert string to ObjectID")
+	})
+
+	mt.Run("success to give a book back", func(mt *mtest.T) {
+		rep := NewUserRepository(mt.DB)
+
+		mt.AddMockResponses(mtest.CreateCursorResponse(0, "library.user", mtest.FirstBatch, bson.D{}))
+
+		idUser := primitive.NewObjectID().Hex()
+
+		err := rep.ReturnBook(idUser, "")
+
+		assert.Nil(t, err, nil)
+	})
+
+	mt.Run("error to give a book back - database", func(mt *mtest.T) {
+		rep := NewUserRepository(mt.DB)
+
+		var wer mtest.WriteConcernError
+		wer.Message = "test error"
+
+		mt.AddMockResponses(mtest.CreateWriteConcernErrorResponse(wer))
+
+		idUser := primitive.NewObjectID().Hex()
+
+		err := rep.ReturnBook(idUser, "")
+
+		assert.NotNil(t, err)
+	})
+
+	mt.Run("error to rent a book - convert string to objectId", func(mt *mtest.T) {
+		rep := NewUserRepository(mt.DB)
+
+		var wer mtest.WriteConcernError
+		wer.Message = "test error"
+
+		mt.AddMockResponses(mtest.CreateWriteConcernErrorResponse(wer))
+
+		err := rep.ReturnBook("", "")
+
+		assert.Contains(t, err.Error(), "convert string to ObjectId")
+	})
 }

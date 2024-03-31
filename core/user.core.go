@@ -10,5 +10,5 @@ type UserCore interface {
 	FindById(id string) (outputapp.UserOutPut, error)
 	Update(id string, input inputapp.UserInput) error
 	RentBook(id string, bookId string) error
-	GiveBookBack(id string, bookId string) error
+	ReturnBook(id string, bookId string) error
 }

@@ -98,7 +98,7 @@ func (u *UserRepository) RentBook(idStr string, bookId string) error {
 	id, err := primitive.ObjectIDFromHex(idStr)
 
 	if err != nil {
-		return err
+		return fmt.Errorf("error to convert string to ObjectID %w", err)
 	}
 
 	v := bson.D{{
@@ -113,16 +113,20 @@ func (u *UserRepository) RentBook(idStr string, bookId string) error {
 			},
 		},
 	}}
-	u.coll.UpdateByID(context.TODO(), id, v)
+	_, err = u.coll.UpdateByID(context.TODO(), id, v)
+
+	if err != nil {
+		return fmt.Errorf("error to update dabase %w", err)
+	}
 
 	return nil
 }
 
-func (u *UserRepository) GiveBookBack(idStr string, bookId string) error {
+func (u *UserRepository) ReturnBook(idStr string, bookId string) error {
 	id, err := primitive.ObjectIDFromHex(idStr)
 
 	if err != nil {
-		return err
+		return fmt.Errorf("return a book - error to convert string to ObjectId %w", err)
 	}
 
 	v := bson.D{{
@@ -138,7 +142,11 @@ func (u *UserRepository) GiveBookBack(idStr string, bookId string) error {
 			}},
 		}},
 	}}
-	u.coll.UpdateByID(context.TODO(), id, v)
+	_, err = u.coll.UpdateByID(context.TODO(), id, v)
+
+	if err != nil {
+		return fmt.Errorf("return a book - error to update database %w", err)
+	}
 
 	return nil
 }
