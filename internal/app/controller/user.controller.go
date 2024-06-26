@@ -14,16 +14,17 @@ type controller struct {
 	rep core.UserCore
 }
 
-// ManagerUser godoc
-// @Tags user
 func NewUserController(rp core.UserCore) *controller {
 	return &controller{
 		rep: rp,
 	}
 }
 
+// @Tags user
 // @Accept		json
 // @Success	201	{object}	outputapp.UserOutPut
+// @Failure 400 {string} string "Bad Request"
+// @Failure 500 {string} string "Internal Server Error"
 // @Router		/user [post]
 func (c *controller) Create(ctx *gin.Context) {
 	var input inputapp.UserInput
@@ -45,6 +46,13 @@ func (c *controller) Create(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, resul)
 }
 
+// @Tags user
+// @Accept		json
+// @Success	204
+// @Failure 400 {string} string "Bad Request"
+// @Failure 500 {string} string "Internal Server Error"
+// @Param id path string true "User Id"
+// @Router		/user [put]
 func (c *controller) Update(ctx *gin.Context) {
 	var input inputapp.UserInput
 	err := ctx.BindJSON(&input)
@@ -65,6 +73,12 @@ func (c *controller) Update(ctx *gin.Context) {
 	ctx.JSON(http.StatusAccepted, gin.H{"data": "success"})
 }
 
+// @Tags user
+// @Success	200	{object}	outputapp.UserOutPut
+// @Failure 400 {string} string "Bad Request"
+// @Failure 500 {string} string "Internal Server Error"
+// @Param id path string true "User ID"
+// @Router		/user [get]
 func (c *controller) FindById(ctx *gin.Context) {
 	id := ctx.Param("id")
 
