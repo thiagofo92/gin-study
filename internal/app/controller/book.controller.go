@@ -3,8 +3,8 @@ package controller
 import (
 	"log/slog"
 	"net/http"
-	inputapp "thiagofo92/study-api-gin/app/input_app"
-	"thiagofo92/study-api-gin/core"
+	inputapp "thiagofo92/study-api-gin/internal/app/input_app"
+	"thiagofo92/study-api-gin/internal/core"
 
 	"github.com/gin-gonic/gin"
 )

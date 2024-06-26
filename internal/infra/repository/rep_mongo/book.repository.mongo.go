@@ -3,9 +3,9 @@ package repmongo
 import (
 	"context"
 	"fmt"
-	inputapp "thiagofo92/study-api-gin/app/input_app"
-	"thiagofo92/study-api-gin/app/outputapp"
-	"thiagofo92/study-api-gin/infra/repository/rep_mongo/schema"
+	inputapp "thiagofo92/study-api-gin/internal/app/input_app"
+	"thiagofo92/study-api-gin/internal/app/outputapp"
+	"thiagofo92/study-api-gin/internal/infra/repository/rep_mongo/schema"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"

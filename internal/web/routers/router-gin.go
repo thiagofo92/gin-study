@@ -1,11 +1,8 @@
 package routers
 
 import (
-	"encoding/json"
-	"io"
-	"log/slog"
-	"thiagofo92/study-api-gin/app/controller"
-	repmongo "thiagofo92/study-api-gin/infra/repository/rep_mongo"
+	"thiagofo92/study-api-gin/internal/app/controller"
+	repmongo "thiagofo92/study-api-gin/internal/infra/repository/rep_mongo"
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -16,38 +13,7 @@ type ginRouter struct {
 	db *mongo.Database
 }
 
-type FnController[T interface{}] func(input T) error
-
-type DataType[T interface{}] struct {
-	Typ   string
-	Value T
-}
-
-func AdapterGin[T interface{}](fn FnController[T]) gin.HandlerFunc {
-	return func(ctx *gin.Context) {
-
-		buff, err := io.ReadAll(ctx.Request.Body)
-
-		if err != nil {
-			slog.Warn("error to read body %v", err)
-		}
-		var body T
-
-		err = json.Unmarshal(buff, &body)
-
-		if err != nil {
-			slog.Warn("error to unmarshal json")
-			ctx.JSON(400, err)
-			return
-		}
-
-		fn(body)
-
-		ctx.JSON(200, "Success")
-	}
-}
-
-func NewGinRouter(r *gin.Engine) *ginRouter {
+func NewGinRouter(r *gin.RouterGroup) *ginRouter {
 	db, err := repmongo.NewConnect()
 
 	if err != nil {
@@ -85,8 +51,3 @@ func (gr *ginRouter) Build() error {
 
 	return nil
 }
-
-// func parseData[T interface{}](args ...T) {
-// 	for _, value := range args {
-// 	}
-// }

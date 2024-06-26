@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
-	"thiagofo92/study-api-gin/web/routers"
+	"thiagofo92/study-api-gin/internal/web/routers"
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"

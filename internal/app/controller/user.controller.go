@@ -1,10 +1,11 @@
 package controller
 
 import (
+	"encoding/json"
 	"log/slog"
 	"net/http"
-	inputapp "thiagofo92/study-api-gin/app/input_app"
-	"thiagofo92/study-api-gin/core"
+	inputapp "thiagofo92/study-api-gin/internal/app/input_app"
+	"thiagofo92/study-api-gin/internal/core"
 
 	"github.com/gin-gonic/gin"
 )
@@ -13,27 +14,32 @@ type controller struct {
 	rep core.UserCore
 }
 
+// ManagerUser godoc
+// @Tags user
 func NewUserController(rp core.UserCore) *controller {
 	return &controller{
 		rep: rp,
 	}
 }
 
+// @Accept		json
+// @Success	201	{object}	outputapp.UserOutPut
+// @Router		/user [post]
 func (c *controller) Create(ctx *gin.Context) {
 	var input inputapp.UserInput
-	err := ctx.BindJSON(&input)
+
+	err := json.NewDecoder(ctx.Request.Body).Decode(&input)
 
 	if err != nil {
 		slog.Warn("error to unmarshal data %v", err)
-		ctx.JSON(http.StatusBadRequest, "invalid input")
-		return
+		ctx.JSON(http.StatusBadRequest, "Bad Request")
 	}
 
 	resul, err := c.rep.Create(input)
 
 	if err != nil {
-		slog.Warn("error to unmarshal data %v", err)
-		return
+		slog.Warn("Error to create a user %v", err)
+		ctx.JSON(http.StatusInternalServerError, "Internal Server error")
 	}
 
 	ctx.JSON(http.StatusCreated, resul)

@@ -2,8 +2,8 @@ package repmongo
 
 import (
 	"testing"
-	inputapp "thiagofo92/study-api-gin/app/input_app"
-	"thiagofo92/study-api-gin/app/outputapp"
+	inputapp "thiagofo92/study-api-gin/internal/app/input_app"
+	"thiagofo92/study-api-gin/internal/app/outputapp"
 
 	"github.com/stretchr/testify/assert"
 	"go.mongodb.org/mongo-driver/bson"
