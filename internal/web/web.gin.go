@@ -3,7 +3,7 @@ package web
 import (
 	"github.com/gin-gonic/gin"
 	"log/slog"
-	_ "thiagofo92/study-api-gin/cmd/docs"
+	_ "thiagofo92/study-api-gin/docs"
 	"thiagofo92/study-api-gin/internal/web/routers"
 
 	swaggerfiles "github.com/swaggo/files"

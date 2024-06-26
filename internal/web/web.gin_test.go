@@ -19,7 +19,7 @@ type Setup struct {
 
 func (s *Setup) BeforeAll() {
 	g := gin.Default()
-	rt := routers.NewGinRouter(g)
+	rt := routers.NewGinRouter(g.Group("/"))
 
 	rt.Build()
 	s.server = httptest.NewServer(g)
@@ -59,8 +59,4 @@ func TestRouters(t *testing.T) {
 	t.Run("Book router", func(t *testing.T) {
 
 	})
-}
-
-func fecth(method string, url, payload interface{}) (interface{}, error) {
-	return nil, nil
 }
